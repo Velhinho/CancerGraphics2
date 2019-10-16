@@ -71,9 +71,9 @@ function createCamera() {
         window.innerWidth / window.innerHeight,
         1,
         1000);
-    camera.position.x = 40;
-    camera.position.y = 40;
-    camera.position.z = 40;
+    camera.position.x = 0;
+    camera.position.y = 50;
+    camera.position.z = 0;
     camera.lookAt(scene.position);
 }
 
@@ -144,7 +144,7 @@ function create_balls() {
         balls[i] = new THREE.Mesh(geometry, material);
 
         balls[i].position.z = 15;
-        balls[i].position.x = 10 - i * 4;
+        balls[i].position.x = 16 - i * 4;
         scene.add(balls[i]);
     }
 }
