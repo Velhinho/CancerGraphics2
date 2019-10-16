@@ -16,7 +16,7 @@ function init() {
     createCamera();
     
     // Lists with the respective elements
-    walls = create_walls();
+    create_walls();
     create_cannons();
     balls = create_balls();
 
@@ -81,7 +81,10 @@ function createCamera() {
 function onKeyDown(event) {
     'use strict';
     if(event.key == "1") {
-
+        camera.position.x = 0;
+        camera.position.y = 100;
+        camera.position.z = 0;
+        camera.lookAt(cannons[0].position);
     }
     if(event.key == "2") {
 
@@ -90,12 +93,39 @@ function onKeyDown(event) {
 
     }
     if(event.key == "q") {
+        highlightCannon(2);
+    }
+    if(event.key == "w") {
         highlightCannon(0);
+    }
+    if(event.key == "e") {
+        highlightCannon(1);
     }
 }
 
 function create_walls() {
     'use strict';
+
+    walls = []
+
+    for(var i = 0; i < 2; i++) {
+        var geometry = new THREE.BoxGeometry(35, 20, 1);
+        var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+        walls[i] = new THREE.Mesh(geometry, material);
+        scene.add(walls[i]);
+    }
+
+    var geometry = new THREE.BoxGeometry(75, 20, 1);
+    var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+    walls[2] = new THREE.Mesh(geometry, material);
+    scene.add(walls[2]);
+
+    walls[2].position.set(0, 8, -50);
+    walls[0].rotation.y += Math.PI / 2;
+    walls[0].position.set(37, 8, -32);
+    walls[1].rotation.y += Math.PI / 2;
+    walls[1].position.set(-37, 8, -32);
+
 }
 
 function create_cannons() {
@@ -113,7 +143,6 @@ function create_cannons() {
             "selected": false
         };
 
-        cannons[i].position.y += 2;
         cannons[i].rotation.x += Math.PI / 2;
         scene.add(cannons[i]);
     }
