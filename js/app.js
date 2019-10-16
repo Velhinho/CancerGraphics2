@@ -101,7 +101,6 @@ function create_walls() {
 function create_cannons() {
     'use strict';
 
-    
     cannons = [];
     
     for(var i = 0; i < 3; i++) {
@@ -123,7 +122,9 @@ function create_cannons() {
 }
 
 function highlightCannon(cannonNumber) {
-    for (i = 0; i < cannons.length; i++) {
+    'use strict';
+
+    for(var i = 0; i < cannons.length; i++) {
         cannons[i].userData.selected = false;
         cannons[i].material.setValues({ color: 0xffff00 });
     }
@@ -134,4 +135,16 @@ function highlightCannon(cannonNumber) {
 function create_balls() {
     'use strict';
 
+    var geometry = new THREE.SphereGeometry(1, 32, 32);
+    var material = new THREE.MeshBasicMaterial({ color: 0xf0f0f0});
+
+    balls = [];
+
+    for(var i = 0; i < 10; i++) {
+        balls[i] = new THREE.Mesh(geometry, material);
+
+        balls[i].position.z = 15;
+        balls[i].position.x = 10 - i * 4;
+        scene.add(balls[i]);
+    }
 }
