@@ -17,7 +17,7 @@ function init() {
     
     // Lists with the respective elements
     walls = create_walls();
-    cannons = create_cannons();
+    create_cannons();
     balls = create_balls();
 
     render();
@@ -94,15 +94,6 @@ function onKeyDown(event) {
     }
 }
 
-function highlightCannon(cannonNumber) {
-    for(i = 0; i < cannons.length(); i++) {
-        cannons[i].userData.selected = false;
-        cannons[i].color = 0xffff00;
-    }
-    cannons[cannonNumber].userData.selected = true;
-    cannons[cannonNumber].color = 0x00ffff;
-}
-
 function create_walls() {
     'use strict';
 }
@@ -110,27 +101,34 @@ function create_walls() {
 function create_cannons() {
     'use strict';
 
-    var geometry = new THREE.CylinderGeometry(2, 2, 8, 32);
-    var material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
     
-    var cannon1 = new THREE.Mesh(geometry, material);
-    cannon1.userData = {
-        "selected": false
-    };
-    var cannon2 = cannon1.clone();
-    var cannon3 = cannon1.clone();
+    cannons = [];
     
-    var cannon_list = [cannon1, cannon2, cannon3];
-    
-    for(var cannon of cannon_list) {
-        cannon.position.y += 2;
-        cannon.rotation.x += Math.PI / 2;
-        scene.add(cannon);
+    for(var i = 0; i < 3; i++) {
+        var geometry = new THREE.CylinderGeometry(2, 2, 8, 32);
+        var material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+
+        cannons[i] = new THREE.Mesh(geometry, material);
+        cannons[i].userData = {
+            "selected": false
+        };
+
+        cannons[i].position.y += 2;
+        cannons[i].rotation.x += Math.PI / 2;
+        scene.add(cannons[i]);
     }
 
-    cannon_list[1].position.set(10, 0, 0);
-    cannon_list[2].position.set(-10, 0, 0);
-    return cannon_list;
+    cannons[1].position.set(10, 0, 0);
+    cannons[2].position.set(-10, 0, 0);
+}
+
+function highlightCannon(cannonNumber) {
+    for (i = 0; i < cannons.length; i++) {
+        cannons[i].userData.selected = false;
+        cannons[i].material.setValues({ color: 0xffff00 });
+    }
+    cannons[cannonNumber].userData.selected = true;
+    cannons[cannonNumber].material.setValues({ color: 0x00ffff });
 }
 
 function create_balls() {
