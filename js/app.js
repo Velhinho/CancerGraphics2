@@ -1,4 +1,6 @@
-var camera, scene, renderer
+var cameras;
+var camera_num = 0;
+var scene, renderer
 
 var walls;
 var cannons;
@@ -13,12 +15,14 @@ function init() {
     document.body.appendChild(renderer.domElement);
     
     createScene();
-    createCamera();
+    createStationaryCameras();
     
     // Lists with the respective elements
-    walls = create_walls();
+    create_walls();
     create_cannons();
-    balls = create_balls();
+    create_balls();
+
+    createMovingCamera();
 
     render();
 
@@ -41,7 +45,7 @@ function animate() {
 function render() {
     'use strict';
 
-    renderer.render(scene, camera)
+    renderer.render(scene, cameras[camera_num])
 }
 
 function onResize() {
@@ -49,11 +53,10 @@ function onResize() {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    if (window.innerHeight > 0 && window.innerWidth > 0) {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
+    if (window.innerHeight > 0 && window.innerWidth > 0 && camera_num == 0) {
+        cameras[camera_num].aspect = window.innerWidth / window.innerHeight;
+        cameras[camera_num].updateProjectionMatrix();
     }
-
 }
 
 function createScene() {
@@ -64,30 +67,44 @@ function createScene() {
     scene.add(new THREE.AxesHelper(10));
 }
 
-function createCamera() {
+function createStationaryCameras() {
     'use strict';
+    
+    cameras = [];
 
-    camera = new THREE.PerspectiveCamera(70,
-        window.innerWidth / window.innerHeight,
+    cameras[0] = cameras[0] = new THREE.OrthographicCamera(window.innerWidth / - 20,
+        window.innerWidth / 20,
+        window.innerHeight / 20,
+        window.innerHeight / - 20,
         1,
         1000);
-    camera.position.x = 0;
-    camera.position.y = 50;
-    camera.position.z = 0;
-    camera.lookAt(scene.position);
+    cameras[0].position.x = 0;
+    cameras[0].position.y = 50;
+    cameras[0].position.z = 0;
+    cameras[0].lookAt(scene.position);
+
+    cameras[1] = new THREE.PerspectiveCamera(
+        45, 
+        window.innerWidth / window.innerHeight, 
+        1, 
+        1000);
+    cameras[1].position.x = 0;
+    cameras[1].position.y = 100;
+    cameras[1].position.z = 0;
+    cameras[1].lookAt(scene.position);
 }
 
 
 function onKeyDown(event) {
     'use strict';
     if(event.key == "1") {
-
+        camera_num = 0;
     }
     if(event.key == "2") {
-
+        camera_num = 1;
     }
     if(event.key == "3") {
-
+        camera_num = 2;
     }
     if(event.key == "q") {
         highlightCannon(0);
@@ -147,4 +164,16 @@ function create_balls() {
         balls[i].position.x = 16 - i * 4;
         scene.add(balls[i]);
     }
+}
+
+function createMovingCamera() {
+    cameras[2] = new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        1,
+        1000);
+    cameras[2].position.x = 0;
+    cameras[2].position.y = 0;
+    cameras[2].position.z = 0;
+    cameras[2].lookAt(balls[0].position);
 }
