@@ -78,8 +78,29 @@ function createCamera() {
 }
 
 
-function onKeyDown() {
+function onKeyDown(event) {
     'use strict';
+    if(event.key == "1") {
+
+    }
+    if(event.key == "2") {
+
+    }
+    if(event.key == "3") {
+
+    }
+    if(event.key == "q") {
+        highlightCannon(0);
+    }
+}
+
+function highlightCannon(cannonNumber) {
+    for(i = 0; i < cannons.length(); i++) {
+        cannons[i].userData.selected = false;
+        cannons[i].color = 0xffff00;
+    }
+    cannons[cannonNumber].userData.selected = true;
+    cannons[cannonNumber].color = 0x00ffff;
 }
 
 function create_walls() {
@@ -93,6 +114,9 @@ function create_cannons() {
     var material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
     
     var cannon1 = new THREE.Mesh(geometry, material);
+    cannon1.userData = {
+        "selected": false
+    };
     var cannon2 = cannon1.clone();
     var cannon3 = cannon1.clone();
     
@@ -106,6 +130,7 @@ function create_cannons() {
 
     cannon_list[1].position.set(10, 0, 0);
     cannon_list[2].position.set(-10, 0, 0);
+    return cannon_list;
 }
 
 function create_balls() {
